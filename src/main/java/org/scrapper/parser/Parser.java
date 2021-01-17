@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface Parser {
 
-    public List<String> parse(File sourceFile);
+    List<String> parse(File sourceFile);
 
 }

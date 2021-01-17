@@ -2,7 +2,6 @@ package org.scrapper;
 
 
 import org.scrapper.downloader.Downloader;
-import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 
 import java.io.File;
