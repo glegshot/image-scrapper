@@ -6,6 +6,6 @@ import java.util.Map;
 
 public interface Downloader {
 
-    Map<String, String> download(String destinationPath, List<String> httpLinks);
+    Map<String, String> download(File destinationPath, List<String> httpLinks);
 
 }
