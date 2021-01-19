@@ -28,7 +28,6 @@ public class HttpLinkParserTest {
     public void initSourceFile() {
         URL fileURL = getClass().getClassLoader().getResource("sample.html");
         sourceFile = new File(fileURL.getPath());
-
     }
 
 

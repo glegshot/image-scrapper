@@ -51,7 +51,6 @@ public class ImageScrapperTest {
         Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any());
         Mockito.verify(httpLinkDownloader, Mockito.times(1)).download(Mockito.any(), Mockito.anyList());
 
-
     }
 
 
