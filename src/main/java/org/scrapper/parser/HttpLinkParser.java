@@ -34,17 +34,14 @@ public class HttpLinkParser implements Parser {
     private String readFile(File file) {
         FileInputStream fileInputStream = null;
         BufferedInputStream bufferedInputStream = null;
-        StringBuilder stringBuilder = null;
+        StringBuilder stringBuilder = new StringBuilder();
         try {
              fileInputStream = new FileInputStream(file);
              bufferedInputStream = new BufferedInputStream(fileInputStream);
-             stringBuilder = new StringBuilder();
             int currentValue;
             while ((currentValue = bufferedInputStream.read()) != -1) {
                 stringBuilder.append((char) currentValue);
             }
-
-            return stringBuilder.toString();
 
         } catch (FileNotFoundException e) {
             System.out.println(e.getLocalizedMessage());
@@ -63,7 +60,7 @@ public class HttpLinkParser implements Parser {
             }
         }
 
-        return null;
+        return stringBuilder.toString();
     }
 
     private void validate(File file) {

@@ -13,6 +13,7 @@ public class HttpLinkParserTest {
 
     HttpLinkParser httpLinkParser;
     File sourceFile;
+    File sourceFileEmpty;
 
     @Before
     public void initMocks() {
@@ -24,6 +25,9 @@ public class HttpLinkParserTest {
     public void initSourceFile() {
         URL fileURL = getClass().getClassLoader().getResource("sample.html");
         sourceFile = new File(fileURL.getPath());
+
+        URL emptyFileURL = getClass().getClassLoader().getResource("sampleNoLinks.html");
+        sourceFileEmpty = new File(emptyFileURL.getPath());
     }
 
 
@@ -34,6 +38,13 @@ public class HttpLinkParserTest {
         Assert.assertEquals(httpLinks.size(), 2);
     }
 
+    @Test
+    public void scanTheHtmlFileWithNoHttpLinksAndReceiveEmptyString() {
+
+        List<String> httpLinks = httpLinkParser.parse(sourceFileEmpty);
+        Assert.assertEquals(httpLinks.size(), 0);
+
+    }
 
 
 }
