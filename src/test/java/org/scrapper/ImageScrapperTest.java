@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.*;
 import org.scrapper.downloader.HttpLinkDownloader;
+import org.scrapper.exception.NotARegularFileException;
 import org.scrapper.parser.HttpLinkParser;
 
 import java.io.File;
@@ -59,6 +60,24 @@ public class ImageScrapperTest {
     public void getFileNotFoundExceptionForTheSourceFilePathProvided() throws IOException {
 
         String sourcePath = "/sample.html";
+        String destinationPath = "/";
+
+        imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
+        Map<String, String> results = imageScrapperApplication.getImages(sourcePath, destinationPath);
+
+        Assert.assertEquals(results.size(),
+                results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).collect(Collectors.toList()).size());
+
+        Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any());
+        Mockito.verify(httpLinkDownloader, Mockito.times(1)).download(Mockito.any(), Mockito.anyList());
+
+
+    }
+
+    @Test(expected = NotARegularFileException.class)
+    public void getNotARegularFileExceptionForSourceFilePathSetAsDirectoryFilePath() throws IOException {
+
+        String sourcePath = "/";
         String destinationPath = "/";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
