@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class HttpLinkParser implements Parser {
 
     @Override
-    public List<String> parse(File sourceFile) {
+    public List<String> parse(File sourceFile) throws IOException {
         validate(sourceFile);
         String sourceText = readFile(sourceFile);
         List<String> httpLinks = extractLinks(sourceText);
@@ -30,52 +30,44 @@ public class HttpLinkParser implements Parser {
     }
 
 
-
-    private String readFile(File file) {
+    private String readFile(File file) throws IOException {
         FileInputStream fileInputStream = null;
         BufferedInputStream bufferedInputStream = null;
         StringBuilder stringBuilder = new StringBuilder();
         try {
-             fileInputStream = new FileInputStream(file);
-             bufferedInputStream = new BufferedInputStream(fileInputStream);
+            fileInputStream = new FileInputStream(file);
+            bufferedInputStream = new BufferedInputStream(fileInputStream);
             int currentValue;
             while ((currentValue = bufferedInputStream.read()) != -1) {
                 stringBuilder.append((char) currentValue);
             }
 
         } catch (FileNotFoundException e) {
-            System.out.println(e.getLocalizedMessage());
-        } catch (IOException e){
-            System.out.println(e.getLocalizedMessage());
-        }finally {
+            throw e;
+        } finally {
             try {
                 if (fileInputStream != null) {
                     fileInputStream.close();
                 }
-                if(bufferedInputStream != null){
+                if (bufferedInputStream != null) {
                     bufferedInputStream.close();
                 }
-            }catch (IOException e){
-                System.out.println(e.getLocalizedMessage());
+            } catch (IOException e) {
+                throw e;
             }
         }
 
         return stringBuilder.toString();
     }
 
-    private void validate(File file) {
+    private void validate(File file) throws FileNotFoundException {
 
-        try {
-            if (!file.exists()) {
-                throw new FileNotFoundException(file.getAbsolutePath());
-            }
-            if (!file.isFile()) {
-                throw new NotARegularFileException(file.getAbsolutePath() + ": Not a regular File");
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getLocalizedMessage());
-        } catch (NotARegularFileException e) {
-            System.out.println(e.getLocalizedMessage());
+        if (!file.exists()) {
+            throw new FileNotFoundException(file.getAbsolutePath());
         }
+        if (!file.isFile()) {
+            throw new NotARegularFileException(file.getAbsolutePath() + ": Not a regular File");
+        }
+
     }
 }

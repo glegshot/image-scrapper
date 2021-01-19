@@ -5,6 +5,8 @@ import org.scrapper.downloader.Downloader;
 import org.scrapper.parser.Parser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +20,7 @@ public class ImageScrapperApplication {
         this.httpLinkDownloader = httpLinkDownloader;
     }
 
-    public Map<String, String> getImages(String sourcePath, String destinationPath) {
+    public Map<String, String> getImages(String sourcePath, String destinationPath) throws IOException {
 
         File sourceFile = new File(sourcePath);
         File destinationDirectory = new File(destinationPath);
