@@ -8,7 +8,6 @@ import org.junit.runners.JUnit4;
 import org.mockito.Mockito;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -18,7 +17,6 @@ public class HttpLinkParserTest {
 
     HttpLinkParser httpLinkParser;
     File sourceFile;
-    File sourceFileEmpty;
 
     @Before
     public void initMocks() {
@@ -31,8 +29,6 @@ public class HttpLinkParserTest {
         URL fileURL = getClass().getClassLoader().getResource("sample.html");
         sourceFile = new File(fileURL.getPath());
 
-        URL emptyFileURL = getClass().getClassLoader().getResource("sampleNoLinks.html");
-        sourceFileEmpty = new File(emptyFileURL.getPath());
     }
 
 
@@ -45,6 +41,9 @@ public class HttpLinkParserTest {
 
     @Test
     public void scanTheHtmlFileWithNoHttpLinksAndReceiveEmptyString() throws IOException {
+
+        URL emptyFileURL = getClass().getClassLoader().getResource("sampleNoLinks.html");
+        File sourceFileEmpty = new File(emptyFileURL.getPath());
 
         List<String> httpLinks = httpLinkParser.parse(sourceFileEmpty);
         Assert.assertEquals(httpLinks.size(), 0);
