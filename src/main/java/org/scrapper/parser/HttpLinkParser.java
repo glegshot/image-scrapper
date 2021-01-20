@@ -20,7 +20,8 @@ public class HttpLinkParser implements Parser {
     }
 
     private List<String> extractLinks(String text) {
-        Pattern pattern = Pattern.compile("http.+(.jpg|.png|.jpeg|.tif|.bmp)");
+        String regex = "http.+(.jpg|.png|.jpeg|.tif|.bmp)";
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(text);
         List<String> httpLinks = new ArrayList<>();
         while (matcher.find()) {
