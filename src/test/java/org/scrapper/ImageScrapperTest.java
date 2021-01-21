@@ -40,7 +40,7 @@ public class ImageScrapperTest {
 
         URL fileURL = getClass().getClassLoader().getResource("sample.html");
         String sourcePath = fileURL.getPath();
-        String destinationPath = "/";
+        String destinationPath = ".";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
         Map<String, String> results = imageScrapperApplication.getImages(sourcePath, destinationPath);
