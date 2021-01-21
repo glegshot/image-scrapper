@@ -34,6 +34,8 @@ public class HttpLinkDownloader implements Downloader {
                     inputStream = response.body().byteStream();
                     saveToFile(inputStream, destinationPath + "/" + fileName);
                     results.put(url,"OK");
+                }else{
+                    results.put(url,"KO");
                 }
             }catch (Exception e){
                 results.put(url, "KO");
