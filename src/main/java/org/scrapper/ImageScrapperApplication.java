@@ -28,10 +28,9 @@ public class ImageScrapperApplication {
 
         logger.info("Source File Path: {}, Destination Directory Path: {}", sourcePath, destinationPath);
         File sourceFile = new File(sourcePath);
-        File destinationDirectory = new File(destinationPath);
         List<String> httpLinks = httpLinkParser.parse(sourceFile);
         logger.info("Total Image Links Found: {}", httpLinks.size());
-        Map<String, String> results = httpLinkDownloader.download(destinationDirectory, httpLinks);
+        Map<String, String> results = httpLinkDownloader.download(destinationPath, httpLinks);
         return results;
 
     }

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,14 +26,13 @@ public class HttpLinkDownloaderTest {
     }
 
     @Test
-    public void returnSuccessResponseForTheLink() {
+    public void returnSuccessResponseForTheLink() throws IOException {
 
-        String destinationPathString = "/";
-        File destinationPath = new File(destinationPathString);
+        String destinationPathString = ".";
         List<String> httpLinks = new ArrayList<>();
         httpLinks.add("https://games.mxdwn.com/wp-content/uploads/2020/11/doooom.jpg");
         httpLinks.add("https://specials-images.forbesimg.com/imageserve/5dc5a8f1ca425400073c556a/960x0.jpg");
-        Map<String, String> results = httpLinkDownloader.download(destinationPath, httpLinks);
+        Map<String, String> results = httpLinkDownloader.download(destinationPathString, httpLinks);
         Assert.assertEquals(httpLinks.size(),
                 results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).collect(Collectors.toList()).size());
 
