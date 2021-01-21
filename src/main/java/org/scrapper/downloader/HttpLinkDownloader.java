@@ -1,7 +1,6 @@
 package org.scrapper.downloader;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+
 import okhttp3.Response;
 import org.scrapper.adapter.HttpAdapter;
 import org.scrapper.adapter.OkHttpAdapter;
@@ -13,11 +12,10 @@ import java.util.Map;
 
 public class HttpLinkDownloader implements Downloader {
 
-
     HttpAdapter httpAdapter;
 
-    public HttpLinkDownloader() {
-        this.httpAdapter = new OkHttpAdapter();
+    public HttpLinkDownloader(HttpAdapter httpAdapter) {
+        this.httpAdapter = httpAdapter;
     }
 
     @Override
