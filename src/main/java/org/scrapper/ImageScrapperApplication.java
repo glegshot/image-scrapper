@@ -1,11 +1,16 @@
 package org.scrapper;
 
 
+import org.scrapper.adapter.HttpAdapter;
+import org.scrapper.adapter.OkHttpAdapter;
 import org.scrapper.downloader.Downloader;
+import org.scrapper.downloader.HttpLinkDownloader;
+import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -37,6 +42,15 @@ public class ImageScrapperApplication {
 
     public static void main(String[] args) {
 
+        HttpAdapter httpAdapter = new OkHttpAdapter();
+        Parser httpLinkParser = new HttpLinkParser();
+        Downloader httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
+        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
+        try {
+            imageScrapperApplication.getImages(args[0], args[1]);
+        }catch (IOException e){
+            logger.error("ERROR {}",e.getLocalizedMessage());
+        }
     }
 
 }
