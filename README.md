@@ -1,5 +1,5 @@
 # image-scrapper
-scrapper of http image links from an html file
+scrapper of http image links from an html file<br>
 
-usage:
-java -jar image-scrapper-1.0-SNAPSHOT.jar -s <sourcefilpath> -d <destinationdirectorypath>
+# usage:<br>
+```java -jar image-scrapper-1.0-SNAPSHOT.jar -s <sourcefilpath> -d <destinationdirectorypath>```
