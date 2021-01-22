@@ -10,7 +10,6 @@ import org.scrapper.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -42,15 +41,22 @@ public class ImageScrapperApplication {
 
     public static void main(String[] args) {
 
-        HttpAdapter httpAdapter = new OkHttpAdapter();
+        for(String arg: args){
+            System.out.println(arg);
+        }
+        /*HttpAdapter httpAdapter = new OkHttpAdapter();
         Parser httpLinkParser = new HttpLinkParser();
         Downloader httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
-        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
-        try {
-            imageScrapperApplication.getImages(args[0], args[1]);
+        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);*/
+        /*try {
+            if("--help".equals(args[0])) {
+                imageScrapperApplication.displayHelp();
+            }else {
+                Map<String, String> results = imageScrapperApplication.getImages(args[0], args[1]);
+            }
         }catch (IOException e){
             logger.error("ERROR {}",e.getLocalizedMessage());
-        }
+        }*/
     }
 
 }

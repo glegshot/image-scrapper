@@ -15,6 +15,7 @@ import org.scrapper.exception.NotARegularFileException;
 import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +59,7 @@ public class ImageScrapperTest {
         Assert.assertEquals(results.size(),
                 results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).collect(Collectors.toList()).size());
 
-        Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any());
+        Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any(File.class));
         Mockito.verify(httpLinkDownloader, Mockito.times(1)).download(Mockito.any(), Mockito.anyList());
 
     }

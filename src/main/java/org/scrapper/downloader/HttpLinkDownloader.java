@@ -3,7 +3,6 @@ package org.scrapper.downloader;
 
 import okhttp3.Response;
 import org.scrapper.adapter.HttpAdapter;
-import org.scrapper.adapter.OkHttpAdapter;
 
 import java.io.*;
 import java.util.HashMap;
