@@ -18,7 +18,7 @@ public class BaseParser implements Parser {
     }
 
     @Override
-    public Map<String, String> parse(String commandString) {
+    public Map<String, String> parse(String[] command) {
         return null;
     }
 }

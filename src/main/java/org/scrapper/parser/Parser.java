@@ -8,6 +8,6 @@ import java.util.Map;
 public interface Parser {
 
     List<String> parse(File sourceFile) throws IOException;
-    Map<String,String> parse(String command);
+    Map<String,String> parse(String[] command);
 
 }

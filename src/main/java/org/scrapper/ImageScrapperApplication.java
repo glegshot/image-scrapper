@@ -5,6 +5,7 @@ import org.scrapper.adapter.HttpAdapter;
 import org.scrapper.adapter.OkHttpAdapter;
 import org.scrapper.downloader.Downloader;
 import org.scrapper.downloader.HttpLinkDownloader;
+import org.scrapper.parser.CommandParser;
 import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 import org.slf4j.Logger;
@@ -34,29 +35,29 @@ public class ImageScrapperApplication {
         File sourceFile = new File(sourcePath);
         List<String> httpLinks = httpLinkParser.parse(sourceFile);
         logger.info("Total Image Links Found: {}", httpLinks.size());
+        logger.info("Downloading .....");
         Map<String, String> results = httpLinkDownloader.download(destinationPath, httpLinks);
+        results.entrySet().stream().forEach(entry -> logger.info(entry.getKey()+" ==> "+entry.getValue()));
         return results;
 
     }
 
     public static void main(String[] args) {
 
-        for(String arg: args){
-            System.out.println(arg);
-        }
-        /*HttpAdapter httpAdapter = new OkHttpAdapter();
+        HttpAdapter httpAdapter = new OkHttpAdapter();
         Parser httpLinkParser = new HttpLinkParser();
         Downloader httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
-        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);*/
-        /*try {
-            if("--help".equals(args[0])) {
-                imageScrapperApplication.displayHelp();
-            }else {
-                Map<String, String> results = imageScrapperApplication.getImages(args[0], args[1]);
-            }
+        Parser commandParser = new CommandParser();
+
+        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
+        try {
+
+            Map<String,String> commands = commandParser.parse(args);
+            Map<String, String> results = imageScrapperApplication.getImages(commands.get("-s"), commands.get("-d"));
+
         }catch (IOException e){
             logger.error("ERROR {}",e.getLocalizedMessage());
-        }*/
+        }
     }
 
 }
