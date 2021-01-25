@@ -3,7 +3,7 @@ scrapper of http image links from an html file<br>
 
 # usage:<br>
 1.run the command <br>
- ```gradle clean assemble uberJar```
+ ```gradle clean assemble uberJar```<br>
 2.once the fat jar will be created then execute below command<br>
 ```java -jar image-scrapper-1.0-SNAPSHOT.jar -s <sourcefilepath> -d <destinationdirectorypath>```
 
