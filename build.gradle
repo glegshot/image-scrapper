@@ -1,7 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
 group 'org.scrapper'
@@ -10,7 +8,6 @@ version '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
-
 
 
 task uberJar(type: Jar) {
