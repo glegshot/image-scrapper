@@ -9,6 +9,23 @@ repositories {
     mavenCentral()
 }
 
+
+
+task uberJar(type: Jar) {
+    archiveClassifier = 'uber'
+    manifest {
+        attributes(
+                'Main-Class': 'org.scrapper.ImageScrapperApplication'
+        )
+    }
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+}
+
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     testImplementation group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
