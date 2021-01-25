@@ -7,10 +7,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.*;
+import org.scrapper.adapter.HttpAdapter;
+import org.scrapper.adapter.OkHttpAdapter;
+import org.scrapper.downloader.Downloader;
 import org.scrapper.downloader.HttpLinkDownloader;
 import org.scrapper.exception.NotARegularFileException;
 import org.scrapper.parser.HttpLinkParser;
+import org.scrapper.parser.Parser;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -20,27 +25,33 @@ import java.util.stream.Collectors;
 @RunWith(JUnit4.class)
 public class ImageScrapperTest {
 
-    @InjectMocks
+
     ImageScrapperApplication imageScrapperApplication;
 
-    @Spy
+
     HttpLinkParser httpLinkParser;
 
-    @Spy
+
     HttpLinkDownloader httpLinkDownloader;
 
     @Before
     public void initMocks() {
-        MockitoAnnotations.initMocks(this);
+
+        HttpAdapter httpAdapter = new OkHttpAdapter();
+        httpLinkParser = new HttpLinkParser();
+        httpLinkParser = Mockito.spy(httpLinkParser);
+        httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
+        httpLinkDownloader = Mockito.spy(httpLinkDownloader);
+        imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
     }
 
 
     @Test
     public void parseAndDownloadImagesAndReturnAllOkTest() throws IOException {
-
+        //acceptance test
         URL fileURL = getClass().getClassLoader().getResource("sample.html");
         String sourcePath = fileURL.getPath();
-        String destinationPath = "/";
+        String destinationPath = ".";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
         Map<String, String> results = imageScrapperApplication.getImages(sourcePath, destinationPath);
@@ -48,7 +59,7 @@ public class ImageScrapperTest {
         Assert.assertEquals(results.size(),
                 results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).collect(Collectors.toList()).size());
 
-        Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any());
+        Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any(File.class));
         Mockito.verify(httpLinkDownloader, Mockito.times(1)).download(Mockito.any(), Mockito.anyList());
 
     }

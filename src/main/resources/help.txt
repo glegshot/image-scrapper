@@ -1,0 +1,14 @@
+usage: image-scrapper [--version] [--help] -s <path> [-d <path>]
+
+flags:
+    -s  source file path
+    -d  destination directory path
+
+options:
+    --version   displays version
+    --help      displays the help page
+
+eg:
+    java -jar image-scrapper.jar -s ./hello.html -d ./files
+
+

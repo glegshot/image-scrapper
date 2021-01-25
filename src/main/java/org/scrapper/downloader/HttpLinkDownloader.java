@@ -1,46 +1,76 @@
 package org.scrapper.downloader;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import okhttp3.Response;
+import org.scrapper.adapter.HttpAdapter;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HttpLinkDownloader implements Downloader {
 
-    OkHttpClient httpClient;
+    HttpAdapter httpAdapter;
 
-    public HttpLinkDownloader(){
-        this.httpClient = new OkHttpClient();
+    public HttpLinkDownloader(HttpAdapter httpAdapter) {
+        this.httpAdapter = httpAdapter;
     }
 
     @Override
-    public Map<String, String> download(File destinationPath, List<String> httpLinks) throws IOException {
+    public Map<String, String> download(String destinationPath, List<String> httpLinks) throws IOException {
 
-        Request request;
-        for(String url : httpLinks){
+        Map<String, String> results = new HashMap<>();
 
-            request = new Request.Builder().url(url).build();
+        for (String url : httpLinks) {
 
-            try(Response response = httpClient.newCall(request).execute()){
-                if(response.isSuccessful()){
-                    InputStream inputStream = response.body().byteStream();
-
+            InputStream inputStream;
+            try (Response response = httpAdapter.execute(url)) {
+                if (response.isSuccessful()) {
+                    String fileName = extractFileName(url);
+                    inputStream = response.body().byteStream();
+                    saveToFile(inputStream, destinationPath + "/" + fileName);
+                    results.put(url,"OK");
+                }else{
+                    results.put(url,"KO");
                 }
+            }catch (Exception e){
+                results.put(url, "KO");
+                throw e;
             }
-
 
         }
 
-
-        Map<String, String> results = new HashMap<>();
-        results.put("https://games.mxdwn.com/wp-content/uploads/2020/11/doooom.jpg", "OK");
-        results.put("https://specials-images.forbesimg.com/imageserve/5dc5a8f1ca425400073c556a/960x0.jpg", "OK");
         return results;
     }
+
+    private String extractFileName(String url) {
+        String[] paths = url.split("/");
+        return paths[paths.length - 1];
+    }
+
+    private void saveToFile(InputStream inputStream, String file) throws IOException {
+        ByteArrayOutputStream outputStream = null;
+        FileOutputStream fileOutputStream;
+
+        try {
+            outputStream = new ByteArrayOutputStream();
+            int currentValue;
+            while ((currentValue = inputStream.read()) != -1) {
+                outputStream.write(currentValue);
+            }
+
+            fileOutputStream = new FileOutputStream(new File(file));
+            outputStream.writeTo(fileOutputStream);
+        } finally {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+
+    }
+
 }

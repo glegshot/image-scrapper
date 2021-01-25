@@ -1,7 +1,12 @@
 package org.scrapper;
 
 
+import org.scrapper.adapter.HttpAdapter;
+import org.scrapper.adapter.OkHttpAdapter;
 import org.scrapper.downloader.Downloader;
+import org.scrapper.downloader.HttpLinkDownloader;
+import org.scrapper.parser.CommandParser;
+import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +33,31 @@ public class ImageScrapperApplication {
 
         logger.info("Source File Path: {}, Destination Directory Path: {}", sourcePath, destinationPath);
         File sourceFile = new File(sourcePath);
-        File destinationDirectory = new File(destinationPath);
         List<String> httpLinks = httpLinkParser.parse(sourceFile);
         logger.info("Total Image Links Found: {}", httpLinks.size());
-        Map<String, String> results = httpLinkDownloader.download(destinationDirectory, httpLinks);
+        logger.info("Downloading .....");
+        Map<String, String> results = httpLinkDownloader.download(destinationPath, httpLinks);
+        results.entrySet().stream().forEach(entry -> logger.info(entry.getKey()+" ==> "+entry.getValue()));
         return results;
 
     }
 
     public static void main(String[] args) {
 
+        HttpAdapter httpAdapter = new OkHttpAdapter();
+        Parser httpLinkParser = new HttpLinkParser();
+        Downloader httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
+        Parser commandParser = new CommandParser();
+
+        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
+        try {
+
+            Map<String,String> commands = commandParser.parse(args);
+            Map<String, String> results = imageScrapperApplication.getImages(commands.get("-s"), commands.get("-d"));
+
+        }catch (IOException e){
+            logger.error("ERROR {}",e.getLocalizedMessage());
+        }
     }
 
 }
