@@ -1,16 +1,17 @@
 package org.scrapper;
 
 
-import org.scrapper.adapter.HttpAdapter;
-import org.scrapper.adapter.OkHttpAdapter;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.scrapper.config.DepedencyInjectionConfigModule;
 import org.scrapper.downloader.Downloader;
-import org.scrapper.downloader.HttpLinkDownloader;
 import org.scrapper.parser.CommandParser;
-import org.scrapper.parser.HttpLinkParser;
 import org.scrapper.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -23,8 +24,8 @@ public class ImageScrapperApplication {
     Parser httpLinkParser;
     Downloader httpLinkDownloader;
 
-
-    public ImageScrapperApplication(Parser httpLinkParser, Downloader httpLinkDownloader) {
+    @Inject
+    public ImageScrapperApplication(@Named("HttpLinkParser")Parser httpLinkParser, Downloader httpLinkDownloader) {
         this.httpLinkParser = httpLinkParser;
         this.httpLinkDownloader = httpLinkDownloader;
     }
@@ -44,12 +45,10 @@ public class ImageScrapperApplication {
 
     public static void main(String[] args) {
 
-        HttpAdapter httpAdapter = new OkHttpAdapter();
-        Parser httpLinkParser = new HttpLinkParser();
-        Downloader httpLinkDownloader = new HttpLinkDownloader(httpAdapter);
         Parser commandParser = new CommandParser();
 
-        ImageScrapperApplication imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
+        Injector injector = Guice.createInjector(new DepedencyInjectionConfigModule());
+        ImageScrapperApplication imageScrapperApplication = injector.getInstance(ImageScrapperApplication.class);
         try {
 
             Map<String,String> commands = commandParser.parse(args);
