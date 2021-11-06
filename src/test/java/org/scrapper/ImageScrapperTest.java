@@ -54,10 +54,10 @@ public class ImageScrapperTest {
         String destinationPath = ".";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
-        Map<String, String> results = imageScrapperApplication.getImages(sourcePath, destinationPath);
+        Map<String, String> results = imageScrapperApplication.scrapForImages(sourcePath, destinationPath);
 
         Assert.assertEquals(results.size(),
-                results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).collect(Collectors.toList()).size());
+                results.entrySet().stream().filter(result -> "OK".equals(result.getValue())).count());
 
         Mockito.verify(httpLinkParser, Mockito.times(1)).parse(Mockito.any(File.class));
         Mockito.verify(httpLinkDownloader, Mockito.times(1)).download(Mockito.any(), Mockito.anyList());
@@ -72,7 +72,7 @@ public class ImageScrapperTest {
         String destinationPath = "/";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
-        imageScrapperApplication.getImages(sourcePath, destinationPath);
+        imageScrapperApplication.scrapForImages(sourcePath, destinationPath);
 
 
     }
@@ -84,7 +84,7 @@ public class ImageScrapperTest {
         String destinationPath = "/";
 
         imageScrapperApplication = new ImageScrapperApplication(httpLinkParser, httpLinkDownloader);
-        imageScrapperApplication.getImages(sourcePath, destinationPath);
+        imageScrapperApplication.scrapForImages(sourcePath, destinationPath);
 
 
     }
