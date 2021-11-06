@@ -21,8 +21,8 @@ public class ImageScrapperApplication {
 
     public static final Logger logger = LoggerFactory.getLogger(ImageScrapperApplication.class);
 
-    Parser httpLinkParser;
-    Downloader httpLinkDownloader;
+    private final Parser httpLinkParser;
+    private final Downloader httpLinkDownloader;
 
     @Inject
     public ImageScrapperApplication(@Named("HttpLinkParser")Parser httpLinkParser, Downloader httpLinkDownloader) {
@@ -30,29 +30,31 @@ public class ImageScrapperApplication {
         this.httpLinkDownloader = httpLinkDownloader;
     }
 
-    public Map<String, String> getImages(String sourcePath, String destinationPath) throws IOException {
+    public Map<String, String> scrapForImages(String sourcePath, String destinationPath) throws IOException {
 
         logger.info("Source File Path: {}, Destination Directory Path: {}", sourcePath, destinationPath);
-        File sourceFile = new File(sourcePath);
-        List<String> httpLinks = httpLinkParser.parse(sourceFile);
+        List<String> httpLinks = extractHttpLinksFromFile(sourcePath);
         logger.info("Total Image Links Found: {}", httpLinks.size());
         logger.info("Downloading .....");
         Map<String, String> results = httpLinkDownloader.download(destinationPath, httpLinks);
-        results.entrySet().stream().forEach(entry -> logger.info(entry.getKey()+" ==> "+entry.getValue()));
+        results.forEach((key, value) -> logger.info(key + " ==> " + value));
         return results;
 
     }
 
-    public static void main(String[] args) {
+    private List<String> extractHttpLinksFromFile(String sourcePath) throws IOException {
+        File sourceFile = new File(sourcePath);
+        return httpLinkParser.parse(sourceFile);
+    }
 
-        Parser commandParser = new CommandParser();
+    public static void main(String[] args) {
 
         Injector injector = Guice.createInjector(new DepedencyInjectionConfigModule());
         ImageScrapperApplication imageScrapperApplication = injector.getInstance(ImageScrapperApplication.class);
         try {
 
-            Map<String,String> commands = commandParser.parse(args);
-            Map<String, String> results = imageScrapperApplication.getImages(commands.get("-s"), commands.get("-d"));
+            Map<String,String> commands = new CommandParser().parse(args);
+            Map<String, String> results = imageScrapperApplication.scrapForImages(commands.get("-s"), commands.get("-d"));
 
         }catch (IOException e){
             logger.error("ERROR {}",e.getLocalizedMessage());

@@ -2,7 +2,6 @@ package org.scrapper.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
-import org.scrapper.ImageScrapperApplication;
 import org.scrapper.adapter.HttpAdapter;
 import org.scrapper.adapter.OkHttpAdapter;
 import org.scrapper.downloader.Downloader;
