@@ -4,6 +4,7 @@ package org.scrapper.downloader;
 import okhttp3.Response;
 import org.scrapper.adapter.HttpAdapter;
 
+import javax.inject.Inject;
 import java.io.*;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ public class HttpLinkDownloader implements Downloader {
 
     HttpAdapter httpAdapter;
 
+    @Inject
     public HttpLinkDownloader(HttpAdapter httpAdapter) {
         this.httpAdapter = httpAdapter;
     }
